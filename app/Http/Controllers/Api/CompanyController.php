@@ -25,7 +25,7 @@ class CompanyController extends Controller
 
     public function store(Request $request)
     {
-        return $this->companyService->newCompany($request->all());
+        return $this->companyService->newCompany($request->all(), $request->file('image'));
     }
 
     public function show(string $identify): JsonResponse
@@ -35,7 +35,7 @@ class CompanyController extends Controller
 
     public function update(Request $request, string $identify): JsonResponse
     {
-        return $this->companyService->updateCompany($identify, $request->all());
+        return $this->companyService->updateCompany($identify, $request->all(), $request->file('image'));
     }
 
     public function destroy(string $identify): JsonResponse

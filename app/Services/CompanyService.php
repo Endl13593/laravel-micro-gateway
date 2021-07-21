@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Http\Utils\DefaultResponse;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
 
 class CompanyService
@@ -28,8 +29,11 @@ class CompanyService
         return $this->defaultResponse->response($response);
     }
 
-    public function newCompany(array $params = [])
+    public function newCompany(array $params = [], UploadedFile $image = null)
     {
+        if ($image)
+            $this->http->attach('image', file_get_contents($image->getPathname()), $image->getClientOriginalName());
+
         $response = $this->http->post($this->url, $params);
 
         return $this->defaultResponse->response($response);
@@ -42,8 +46,11 @@ class CompanyService
         return response()->json(json_decode($response->body()), $response->status());
     }
 
-    public function updateCompany(string $identify, array $params = []): JsonResponse
+    public function updateCompany(string $identify, array $params = [], UploadedFile $image = null): JsonResponse
     {
+        if ($image)
+            $this->http->attach('image', file_get_contents($image->getPathname()), $image->getClientOriginalName());
+
         $response = $this->http->put("{$this->url}/{$identify}", $params);
 
         return response()->json(json_decode($response->body()), $response->status());
